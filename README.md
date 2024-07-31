@@ -1,8 +1,10 @@
 # 1. Introduction
 
-Channels is a real-time chat application (it is a web app and will never have any android/ios app) that supports private channels (duh!). It was built during the internet shutdown in Bangladesh with the intention of running it on the national intranet. The features and looks of the app is inspired by the old school IRC chats.
+Channels is a real-time chat application that supports private channels (duh!). It was built during the internet shutdown in Bangladesh with the intention of running it on the national intranet. The features and looks of the app is inspired by the old school IRC chats.
 
 Due to the unique circumstance in which it was built, it rejects all modern tooling and embraces the absolute simplest code (almost as if we went back to 1995). In fact without internet access, [this python script](https://github.com/imtixz/offline-npm-install) was used to install some of the node modules. As a side effect, it has no bloat and is extremely fast. It does not support end-to-end encyrption yet but it'll soon be added.
+
+Note: Just to clarify. It is a web app. It has no android/ios app and will never have one.
 
 # 2. How to run
 
