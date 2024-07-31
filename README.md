@@ -1,6 +1,8 @@
 # 1. Introduction
 
-Channels is a real-time chat application that supports different channels (duh!). It was built during the internet shutdown in Bangladesh with the intention of running it on the national intranet. The features and looks of the app is inspired by the old school IRC chats. Due to the unique circumstance in which it was built, it rejects all modern tooling and embraces the absolute simplest code (almost as if we went back to 1995). In fact without internet access, [this python script](https://github.com/imtixz/offline-npm-install) was used to install some of the npm modules. As a side effect, it has no bloat and is extremely fast. It does not support end-to-end encyrption yet but it'll will soon be added.
+Channels is a real-time chat application (it is a web app and will never have any android/ios app) that supports private channels (duh!). It was built during the internet shutdown in Bangladesh with the intention of running it on the national intranet. The features and looks of the app is inspired by the old school IRC chats.
+
+Due to the unique circumstance in which it was built, it rejects all modern tooling and embraces the absolute simplest code (almost as if we went back to 1995). In fact without internet access, [this python script](https://github.com/imtixz/offline-npm-install) was used to install some of the npm modules. As a side effect, it has no bloat and is extremely fast. It does not support end-to-end encyrption yet but it'll will soon be added.
 
 # 2. How to run
 
@@ -13,7 +15,7 @@ Pre-requisite: You need to have docker installed for this to work. If you don't 
 Clone the repository
 
 ```
-git clone <put ssh url here>
+git clone git@github.com:imtixz/channels.git
 ```
 
 Enter the directory
@@ -33,7 +35,7 @@ docker compose up -d
 Clone the repository
 
 ```
-git clone <put ssh url here>
+git clone git@github.com:imtixz/channels.git
 ```
 
 Enter the directory
