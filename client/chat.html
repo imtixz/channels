@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Channels Chat</title>
+    <link href="./styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="nav">
+      <h3 id="channel-name"></h3>
+      <button
+        id="user-count"
+        style="
+          height: max-content;
+          margin-top: auto;
+          margin-bottom: auto;
+          margin-left: 1rem;
+          padding-top: 2px;
+          padding-bottom: 2px;
+        "
+        onClick="showonline()"
+      ></button>
+    </div>
+    <div id="messages-list"></div>
+    <div style="display: flex; flex-direction: row">
+      <input class="chatbox" id="chatbox" />
+      <button class="chat-btn" onclick="sendMessage()">Send</button>
+    </div>
+  </body>
+  <script src="./dist/socket.io.js"></script>
+  <script>
+    let socket;
+    let chatboxInput = document.getElementById("chatbox");
+
+    let token = sessionStorage.getItem("token");
+    let username = sessionStorage.getItem("username");
+    let channelName = sessionStorage.getItem("channel");
+    let userList = [];
+
+    chatboxInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+      return false;
+    });
+
+    const messageGenerator = (username, message) => {
+      let mes = "";
+      // let time = new Date(message.time);
+      // time = time.toLocaleString();
+      if (username == message.name) {
+        mes = `<p class="my-msg"><span>${message.name}: </span><span>${
+          message.message
+        }</span> <span class="msg-time">${formatTime(message.time)}</span></p>`;
+      } else {
+        mes = `<p><span>${message.name}: </span><span>${
+          message.message
+        }</span> <span class="msg-time">${formatTime(message.time)}</span></p>`;
+      }
+
+      return mes;
+    };
+
+    function formatTime(date) {
+      const _date = new Date(date);
+      const formattedTime = _date.toLocaleTimeString("en-US", {
+        minute: "2-digit",
+        hour: "2-digit",
+      });
+      return formattedTime;
+    }
+
+    const scrollToBottom = () => {
+      let list = document.getElementById("messages-list");
+      list.scrollTop = list.scrollHeight;
+    };
+
+    const sendMessage = async () => {
+      let msg = chatboxInput.value;
+
+      socket.emit("message", { message: msg, channel: channelName });
+      chatboxInput.value = "";
+    };
+
+    const showonline = async () => {
+      alert(`These people are online:\n${userList.join("\n")}`);
+    };
+
+    function init() {
+      scrollToBottom();
+      document.getElementById("channel-name").innerText = "#" + channelName;
+      socket = io("http://localhost:9001/", {
+        auth: {
+          token: token,
+          name: username,
+        },
+      });
+      socket.on("connect", () => {
+        console.log("Connected");
+      });
+
+      socket.on("messages", (messages) => {
+        let htmlString = "";
+        messages.map((message) => {
+          let mes = messageGenerator(username, message);
+          htmlString = htmlString + mes;
+        });
+
+        let list = document.getElementById("messages-list");
+        list.innerHTML = htmlString;
+        scrollToBottom();
+      });
+
+      socket.on("message", (message) => {
+        let mes = messageGenerator(username, message);
+        let list = document.getElementById("messages-list");
+        list.innerHTML += mes;
+        scrollToBottom();
+      });
+
+      socket.on("users", (users) => {
+        userList = [];
+        let count = 0;
+        users
+          .filter((u) => {
+            return u.channel == channelName;
+          })
+          .map((user) => {
+            userList.push(user.name);
+            count++;
+          });
+        let userCount = document.getElementById("user-count");
+        userCount.innerText = count + " Online";
+      });
+    }
+
+    init();
+  </script>
+</html>

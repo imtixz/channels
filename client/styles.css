@@ -1,0 +1,54 @@
+.login {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-btn {
+  margin-top: 2rem;
+}
+
+.action-btn {
+  margin-top: 1.5rem;
+  align-self: center;
+  cursor: pointer;
+}
+
+.nav {
+  display: flex;
+  background-color: white;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+}
+
+#messages-list {
+  margin-top: 65px;
+  max-height: 85dvh;
+  overflow-y: auto;
+}
+
+.my-msg {
+  font-weight: 600;
+}
+
+.msg-time {
+  font-size: x-small;
+  color: grey;
+}
+
+.chatbox {
+  width: calc(100vw - 155px);
+  height: 30px;
+}
+
+.chat-btn {
+  width: 100px;
+  height: 35px;
+  margin-left: 0.5rem;
+}

@@ -1,0 +1,19 @@
+{
+  "name": "channels",
+  "version": "1.1.0",
+  "description": "realtime chat application inspired by irc",
+  "main": "main.js",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.7.5"
+  },
+  "scripts": {
+    "start": "concurrently \"node main.js\" \"node run-frontend.js\""
+  },
+  "author": "Imtiaz",
+  "license": "MIT"
+}

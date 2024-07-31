@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Channels</title>
+    <link href="./styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="login">
+      <div class="login-form">
+        <h1>#Channels</h1>
+        <p>Username</p>
+        <input id="username" />
+        <p>Channel Name</p>
+        <input id="channel-name" placeholder="global" />
+        <p>Password</p>
+        <input id="password" placeholder="password" />
+        <button onclick="login()" class="login-btn">Join</button>
+        <a class="action-btn" href="/channel.html">Create a channel</a>
+      </div>
+    </div>
+  </body>
+  <script src="./dist/sha256.min.js"></script>
+  <script>
+    let userNameInput = document.getElementById("username");
+    let channelNameInput = document.getElementById("channel-name");
+    let passwordInput = document.getElementById("password");
+
+    async function login() {
+      if (
+        userNameInput.value.length &&
+        !channelNameInput.value.length &&
+        !passwordInput.value.length
+      ) {
+        channelNameInput.value = "global";
+        passwordInput.value = "password";
+      } else if (
+        !userNameInput.value.length ||
+        !channelNameInput.value.length ||
+        !passwordInput.value.length
+      ) {
+        alert("Fill out the form before clicking join");
+        return;
+      }
+
+      fetch("http://localhost:9001/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: userNameInput.value,
+          channelName: channelNameInput.value.trimEnd(),
+          password: sha256(passwordInput.value.trimEnd()),
+        }),
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("An error occured");
+          }
+          return res.json();
+        })
+        .then((res) => {
+          sessionStorage.setItem("token", res.token);
+          sessionStorage.setItem("username", userNameInput.value);
+          sessionStorage.setItem("channel", channelNameInput.value);
+          goToChat();
+        })
+        .catch((e) => {
+          console.log(e);
+          alert("An error occured. Possibly incorrect credentials");
+        });
+    }
+
+    function goToChat() {
+      location.href = "/chat.html";
+    }
+  </script>
+</html>
