@@ -72,6 +72,8 @@ Find the private IP address of the device that's running this app. It will most 
 
 To do this, first you need to make sure you have real IP (an easy way to test this is to compare the WAN IP address from your router's admin panel and your IP address after googling "what is my IP", if it's real IP they should be the same). Then copy your real IP address and then you need to replace some lines in the code.
 
+If you're running it on the intranet, you will also have to open the port 8006 and 9001 by using the "Port Forward" option in your router (at your own risk).
+
 ### 3.2 Modifying the codebase
 
 Replace localhost with the IP address you copied in the following locations:
