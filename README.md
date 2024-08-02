@@ -36,7 +36,7 @@ Then go to your web browser and type localhost:8383 and you should see the homes
 
 # 3. How to use it in the intranet
 
-By default when you run the code it will run in localhost. If you want to access it on the intranet you need to first ensure that you have a public IP address (most ISP packages worth 1500 BDT or more come with one). Then you have to do port forwarding. The steps are:
+By default when you run the code it will run on localhost. If you want to access it on the intranet you need to first ensure that you have a public IP address (most ISP packages worth 1500 BDT or more come with one). An easy to verify whether you have public IP address or not is to check the IP address mentioned on your router's admin panel and compare it with the IP address that comes when you search "what is my ip address" on google. If they're the same, you have a public IP address. Then you have to do port forwarding. The steps are:
 
 1. Find the private IP of the laptop/pc that's running the app. It will most likely be in the wifi settings in your laptop/pc. If you can't find it there, another place where you may find it is the router's admin panel. It should have a list of devices connected to the router, their hostname and their private IP address.
 
