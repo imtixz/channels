@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Channels Chat</title>
     <link href="./styles.css" rel="stylesheet" />
+    <link rel="icon" href="/hashtag.ico" />
   </head>
   <body>
     <div class="nav">
@@ -19,7 +20,7 @@
           padding-top: 2px;
           padding-bottom: 2px;
         "
-        onClick="showonline()"
+        onClick="showOnline()"
       ></button>
     </div>
     <div id="messages-list"></div>
@@ -29,12 +30,17 @@
     </div>
   </body>
   <script src="./dist/socket.io.js"></script>
+  <script src="./dist/sha256.min.js"></script>
+  <script src="./dist/crypto.js"></script>
+  <script src="./dist/bcrypt.js"></script>
+  <script src="./dist/aes.js"></script>
   <script>
     let socket;
     let chatboxInput = document.getElementById("chatbox");
 
     let token = sessionStorage.getItem("token");
     let username = sessionStorage.getItem("username");
+    let password = sessionStorage.getItem("password");
     let channelName = sessionStorage.getItem("channel");
     let userList = [];
 
@@ -47,8 +53,6 @@
 
     const messageGenerator = (username, message) => {
       let mes = "";
-      // let time = new Date(message.time);
-      // time = time.toLocaleString();
       if (username == message.name) {
         mes = `<p class="my-msg"><span>${message.name}: </span><span>${
           message.message
@@ -76,21 +80,72 @@
       list.scrollTop = list.scrollHeight;
     };
 
+    function encryptMessage(key, message) {
+      var iv = [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36];
+      const textBytes = aesjs.utils.utf8.toBytes(
+        padTo16Bytes(encodeURIComponent(msg))
+      );
+      const aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
+      const encryptedBytes = aesCbc.encrypt(textBytes);
+      const encryptedHex = aesjs.utils.hex.fromBytes(encryptedBytes);
+
+      return encryptedHex;
+    }
+
+    function decryptMessage(key, encryptedData) {
+      const iv = [
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+      ];
+      const encryptedBytes = aesjs.utils.hex.toBytes(encryptedData);
+      const aesCbc = new aesjs.ModeOfOperation.cbc(key, iv);
+      const decryptedBytes = aesCbc.decrypt(encryptedBytes);
+      const decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes);
+      return decryptedText;
+    }
+
+    function generateKeyFromPassword(password) {
+      const hash = sha256(password);
+      const hashArray = Array.from(hash);
+      const keyArray = hashArray.slice(0, 32);
+      const actualKey = keyArray.map((v) => {
+        return v.charCodeAt(0);
+      });
+      return actualKey;
+    }
+
+    function padTo16Bytes(str) {
+      const blockSize = 16;
+      const padChar = " ";
+      const padLength = blockSize - (str.length % blockSize);
+
+      // Pad the string with the padChar to make its length a multiple of 16
+      const paddedStr = str + padChar.repeat(padLength);
+
+      return paddedStr;
+    }
+
     const sendMessage = async () => {
       let msg = chatboxInput.value;
+      const iv = [
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+      ];
+      const key = generateKeyFromPassword(password);
 
-      socket.emit("message", { message: msg, channel: channelName });
+      socket.emit("message", {
+        message: encryptedHex,
+        channel: channelName,
+      });
       chatboxInput.value = "";
     };
 
-    const showonline = async () => {
+    const showOnline = async () => {
       alert(`These people are online:\n${userList.join("\n")}`);
     };
 
     function init() {
       scrollToBottom();
       document.getElementById("channel-name").innerText = "#" + channelName;
-      socket = io("http://localhost:9001/", {
+      socket = io("/", {
         auth: {
           token: token,
           name: username,
@@ -113,7 +168,12 @@
       });
 
       socket.on("message", (message) => {
-        let mes = messageGenerator(username, message);
+        let key = generateKeyFromPassword(password);
+        let decripted = decryptMessage(key, message.message);
+        let mes = messageGenerator(username, {
+          ...message,
+          message: decodeURIComponent(decripted),
+        });
         let list = document.getElementById("messages-list");
         list.innerHTML += mes;
         scrollToBottom();
