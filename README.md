@@ -42,7 +42,7 @@ By default when you run the code it will run in localhost. If you want to access
 
 2. Find the port forwarding option on your router. It should ask for the port numbers and IP address. Put your device's private IP address there and put both ports as 8383. Leave everything else as default.
 
-3. Then look for your public IP address in the admin panel. Copy and paste that into the browser and add 8383 port number just like last time. So the url would be <your-real-ip>:8383. You should then see the homescreen of channels
+3. Then look for your public IP address in the admin panel. Copy and paste that into the browser and add 8383 port number just like last time. So the url would be your-real-ip:8383. You should then see the homescreen of channels
 
 # 3. Roadmap
 
