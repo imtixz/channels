@@ -29,7 +29,7 @@ npm install
 Run the app using npm
 
 ```
-node
+npm start
 ```
 
 Then go to your web browser and type localhost:8383 and you should see the homescreen of channels.
@@ -40,7 +40,7 @@ By default when you run the code it will run in localhost. If you want to access
 
 1. Find the private IP of the laptop/pc that's running the app. It will most likely be in the wifi settings in your laptop/pc. If you can't find it there, another place where you may find it is the router's admin panel. It should have a list of devices connected to the router, their hostname and their private IP address.
 
-2. Find the port forwarding option on your router. It should ask for the port numbers and IP address. Put your device's private IP address there and put both ports as 8383. Leave everything else as default.
+2. Find the port forwarding option on your router (some routers call it virtual server, idk why). It should ask for the port numbers and IP address. Put your device's private IP address there and put both ports as 8383. Leave everything else as default.
 
 3. Then look for your public IP address in the admin panel. Copy and paste that into the browser and add 8383 port number just like last time. So the url would be your-real-ip:8383. You should then see the homescreen of channels
 
