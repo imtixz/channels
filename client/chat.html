@@ -157,9 +157,14 @@
       });
 
       socket.on("messages", (messages) => {
+        let key = generateKeyFromPassword(password);
+        let decripted = decryptMessage(key, message.message);
         let htmlString = "";
         messages.map((message) => {
-          let mes = messageGenerator(username, message);
+          let mes = messageGenerator(username, {
+            ...message,
+            message: decodeURIComponent(decripted),
+          });
           htmlString = htmlString + mes;
         });
 
